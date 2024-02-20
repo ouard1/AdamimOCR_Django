@@ -74,7 +74,7 @@
       Ready to explore the world of Arabic manuscript OCR? Sign up now to get started!
     </p>
     <br>
-    <router-link to="/sign-up" class="button is-primary is-size-5">Sign Up</router-link>
+    <router-link to="/Api" class="button is-primary is-size-5">Access Adamim OCR</router-link>
   </div>
 </section>
 </div>
