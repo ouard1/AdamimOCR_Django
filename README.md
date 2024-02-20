@@ -17,23 +17,27 @@
 - Make it possible to logout (Done)
 
 - Style Pages :
-    - Template Page
-    - Home Page
-    - Login Page
-    - Sign Up Page
-    - My Account Page
-    - Api Page
-    - About Page 
+    - Template Page (Done)
+    - Home Page (Done)
+    - Login Page (Done)
+    - Sign Up Page (Done)
+    - My Account Page (Done)
+    - Api Page (Done)
+    - Set up Modal for Login (Done)
 
 - Add 3rd party authentication :
-    - Add Google Auth
+    - Setup Google Auth (Done)
+    - Retrieve response (Done)
+    - Send response to the backend (Done)
+    - Return token to the frontend (Done)
+    - Create a google session for the user (Done)
 
 - Deploy Django :
     - Create a server and access it
     - Install software
-    - Create postgres database
-    - Create users and virtual environment
-    - Install packages and get project files
+    - Create postgres database (Done)
+    - Create users and virtual environment (Done)
+    - Install packages and get project files (Done)
     - Create separate settings file for production
     - set up gunicorn
     - set up a supervisor
@@ -41,6 +45,6 @@
     - set up nginx
 
 - Deploy Vue :
-    - Generate files locally
+    - Generate files locally (Done)
     - Send files to server
     - Set up nginx virtual host

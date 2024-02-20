@@ -25,13 +25,13 @@
 
                     <div class="field">
                         <div class="control">
-                            <button class="button is-dark">Log in</button>
+                            <button class="button is-link">Log in</button>
                         </div>
                     </div>
 
                     <hr>
 
-                    Or <router-link to="/sign-up">Click Here</router-link> To Sign up !
+                    <router-link to="/sign-up">Click Here</router-link> To Sign up !
                     
                 </form>
             </div>

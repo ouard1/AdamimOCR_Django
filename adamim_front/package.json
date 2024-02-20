@@ -7,12 +7,14 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "aos": "^2.3.4",
     "axios": "^1.6.7",
     "bulma": "^0.9.4",
     "bulma-toast": "^2.4.3",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
+    "vue3-google-login": "^2.0.25",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
@@ -22,5 +24,7 @@
     "@vue/cli-service": "~5.0.0",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0"
-  }
+  },
+  "main": "index.js",
+  "license": "MIT"
 }
