@@ -6,7 +6,7 @@
 - Install setup Vue (Done)
 - Include Font Awesome (Done)
 - Set up the base template (Done)
-- setup Vuex / State (Done)
+- Setup Vuex / State (Done)
 - Make it possible to Sign-up (Done)
 - Added Passwords serialization and hash (Done)
 - Added Tokenization when logging in (Done)
@@ -31,6 +31,11 @@
     - Send response to the backend (Done)
     - Return token to the frontend (Done)
     - Create a google session for the user (Done)
+
+- Integrate HuggingFace Space :
+    - Duplicate Original HuggingFace Space (Done)
+    - Create a Token (Done)
+    - Install Gradio_Client 
 
 - Deploy Django :
     - Create a server and access it
