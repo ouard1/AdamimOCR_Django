@@ -4,9 +4,9 @@
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
           <a class="navbar-item">
-            <img src="@/assets/logo.png" alt="Logo Adamim">
+            <img src="@/assets/logo.png" alt="Logo Kalima">
           </a>
-          <strong>Adamim OCR</strong></router-link>
+          <strong>Kalima</strong></router-link>
         <a class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-menu" @click="showMobileMenu = !showMobileMenu">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -22,7 +22,7 @@
           <div class="navbar-item">
             <div class="buttons">
               <template v-if="$store.state.isAuthenticated">
-                <router-link to="/Api" class="button is-success">Access Adamim</router-link>
+                <router-link to="/Api" class="button is-success">Access Kalima</router-link>
                 <button @click="logout()" class="button is-danger">Log out</button>
               </template>
 
@@ -41,17 +41,18 @@
   <section class="section mt-6">
     <router-view/>
 
-    <!-- The Modal Is Here -->
-    <div>
-    <div class="modal" :class="{'is-active': modalOpen}">
-      <div class="modal-background" @click="closeModal"></div>
-      <div class="modal-content">
-        <Login @closeModal="closeModal" />
+      <!-- The Modal Is Here -->
+      <div>
+        <div class="modal" :class="{'is-active': modalOpen}">
+          <div class="modal-background" @click="closeModal"></div>
+          <div class="modal-content">
+            <!-- Pass the closeModal method as a prop to the Login component -->
+            <Login @loginSuccess="handleLoginSuccess" />
+          </div>
+          <button class="modal-close is-large" @click="closeModal"></button>
+        </div>
       </div>
-      <button class="modal-close is-large" @click="closeModal"></button>
-    </div>
-  </div>
-  </section>
+    </section>
   
   <footer class="footer has-background-link">
     <p class="has-text-centered" style="color: white; font-size: 1.2em;" > <a href="https://nara.dsru.cerist.dz/" style="color: white;">Copyright Data Science & Applications Unit (CERIST)</a></p>
@@ -74,7 +75,7 @@ export default {
     }
   },
 beforeCreate() {
-  this.$store.commit('initializeStore')
+  // this.$store.commit('initializeStore')
   const token = this.$store.state.token
 
   if (token) {
@@ -87,11 +88,11 @@ components: {
   Login
 },
 methods: {
-  openModal(){
-    this.modalOpen = true
+  openModal() {
+    this.modalOpen = true;
   },
-  closeModal(){
-    this.modalOpen = false
+  closeModal() {
+    this.modalOpen = false;
   },
   logout(){
             axios.defaults.headers.common["Authorization"] = ""
@@ -103,7 +104,13 @@ methods: {
             this.$store.commit('removeToken')
 
             this.$router.push('/')
-        }
+        },
+    handleLoginSuccess(token) {
+      localStorage.setItem("token", token);
+      axios.defaults.headers.common["Authorization"] = "Token " + token;
+      this.$router.push('/api');
+      this.$emit('closeModal');
+    }
 }
 }
 </script>

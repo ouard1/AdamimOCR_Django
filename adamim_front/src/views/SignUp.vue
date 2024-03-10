@@ -57,7 +57,7 @@ import { toast } from 'bulma-toast'
 
 export default {
     mounted(){
-    document.title = 'Sign Up | Adamim OCR'
+    document.title = 'Sign Up | Kalima'
 },
     name: 'SignUp',
     data() {

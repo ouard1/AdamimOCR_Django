@@ -58,7 +58,7 @@ export default{
         }
     },
 mounted(){
-    document.title = 'log In | Adamim OCR'
+    document.title = 'log In | Kalima'
 },
 methods: {
     async submitForm(){

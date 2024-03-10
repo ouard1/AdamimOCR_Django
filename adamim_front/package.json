@@ -14,8 +14,9 @@
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vue3-google-login": "^2.0.25",
-    "vuex": "^4.0.0"
+    "vue3-google-login": "^2.0.26",
+    "vuex": "^4.0.0",
+    "yarn": "^1.22.21"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

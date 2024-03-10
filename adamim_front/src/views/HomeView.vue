@@ -6,13 +6,13 @@
     <div class="left-content">
       <router-link to="/">
         <a>
-          <img src="@/assets/logo.png" alt="Logo Adamim">
+          <img src="@/assets/logo.png" alt="Logo kalima">
         </a>
       </router-link>
     </div>
     <div class="right-content" style="text-align: center;">
       <h2>Welcome to</h2>
-      <h1 class="main_title" style="letter-spacing: -5px;">Adamim OCR</h1>
+      <h1 class="main_title" style="letter-spacing: -5px;">Kalima</h1>
       <h2>Your destination for Arabic manuscript OCR</h2>
     </div>
   </div>
@@ -23,13 +23,13 @@
   <div class="tile is-4 is-vertical is-parent">
     <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
         <!-- <p class="title" style="color: aliceblue;">One</p> -->
-        <h3 class="title is-size-3">What is Adamim OCR?</h3>
+        <h3 class="title is-size-3">What is Kalima ?</h3>
         <p class="main_content is-size-5" style="letter-spacing: 1px;">
-            Adamim OCR is a powerful tool designed to extract text from Arabic manuscripts using Optical Character Recognition (OCR) technology.
+            Kalima is a powerful tool designed to extract text from Arabic manuscripts using Optical Character Recognition (OCR) technology.
         </p>
         <br>
         <p class="main_content is-size-5" style="letter-spacing: 1px;">
-            With Adamim OCR, you can easily digitize and analyze ancient Arabic texts, making them accessible for research, education, and preservation purposes.
+            With Kalima, you can easily digitize and analyze ancient Arabic texts, making them accessible for research, education, and preservation purposes.
         </p>
     </div>
     <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
@@ -74,7 +74,7 @@
       Ready to explore the world of Arabic manuscript OCR? Sign up now to get started!
     </p>
     <br>
-    <router-link to="/Api" class="button is-primary is-size-5">Access Adamim OCR</router-link>
+    <router-link to="/Api" class="button is-primary is-size-5">Access Kalima</router-link>
   </div>
 </section>
 </div>
@@ -84,7 +84,7 @@
 <script>
 export default {
   mounted() {
-    document.title = 'Welcome To Adamim OCR';
+    document.title = 'Welcome To Kalima';
   }
 };
 </script>
