@@ -1,45 +1,38 @@
+# api/views.py
+
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+from django.contrib.auth import get_user_model
+from .serializers import UserSerializer
 
-from social_django.utils import psa
+User = get_user_model()
 
-from requests.exceptions import HTTPError
-from social_core.exceptions import AuthForbidden
-from django.views.decorators.csrf import csrf_exempt
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@csrf_exempt
-@psa()
-def register_by_access_token(request, backend):
+def google_one_tap_auth(request):
+    id_token = request.data.get('id_token')
 
-    token = request.data.get('access_token')
-    print(token)
     try:
-        user = request.backend.do_auth(token)
+        # Verify id_token with Google
+        CLIENT_ID = 'your_google_client_id'  # Replace with your Google Client ID
+        idinfo = id_token.verify_oauth2_token(id_token, google_requests.Request(), CLIENT_ID)
 
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        # Extract user information from idinfo
+        google_sub = idinfo['sub']
+        email = idinfo['email']
 
-    except AuthForbidden as e:
-        return Response({'error': 'Authentication with Google failed: {}'.format(e)}, status=status.HTTP_403_FORBIDDEN)
+        # Check if user exists in database
+        user, created = User.objects.get_or_create(google_sub=google_sub, defaults={'email': email})
+
+        # Serialize user data
+        serializer = UserSerializer(user)
+
+        # Return serialized user data with JWT or session token
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'POST'])
-def authentication_test(request):
-    print(request.user)
-    return Response(
-        {
-            'message': "User successfully authenticated"
-        },
-        status=status.HTTP_200_OK,
-    )
-
