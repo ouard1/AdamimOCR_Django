@@ -30,7 +30,9 @@
                     </div>
 
                     <hr>
-
+                    <div>
+                    <GoogleSignIn />
+                </div>
                     <div style="font-family: 'poppins', sans-serif; color: white; text-align: center;">
                         or sign up with Google 
                         <img src="@/assets/google.png" alt="Google Sign Up" style="width: 1.5em; height: 1.5em; margin-left: 5px; background: transparent;"/>

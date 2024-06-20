@@ -1,59 +1,88 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>
+    <h1>Google One Tap Example</h1>
+    <div id="g_id_onload"
+         data-client_id="146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com"
+         data-login_uri="http://localhost:8080"
+         data-callback="handleCredentialResponse"
+         data-cancel_on_tap_outside="false">
+    </div>
+    <div v-if="token">
+      <p>Signed in with token: {{ token }}</p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  data() {
+    return {
+      token: null
+    };
+  },
+  mounted() {
+    // Load Google One Tap client
+    this.loadGoogleOneTapClient();
+  },
+  methods: {
+    loadGoogleOneTapClient() {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.onload = () => {
+        window.google.accounts.id.initialize({
+          client_id: '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com', // Replace with your actual client ID
+          callback: this.handleCredentialResponse,
+          login_uri: 'http://localhost:8080', // Replace with your app's URI
+          cancel_on_tap_outside: false
+        });
+        this.renderGoogleOneTapButton();
+      };
+      document.head.appendChild(script);
+    },
+    renderGoogleOneTapButton() {
+      window.google.accounts.id.renderButton(
+        document.getElementById('g_id_onload'),
+        { theme: 'filled_blue', size: 'large', text: 'continue_with' }
+      );
+    },
+    handleCredentialResponse(response) {
+      if (response.clientId && response.credential && response.select_by) {
+        const access_token = response.credential;
+        this.sendTokenToBackend(access_token);
+        this.token = access_token; // Optionally store or display the token
+      } else {
+        console.error('Invalid response from Google authentication');
+      }
+    },
+    async sendTokenToBackend(access_token) {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/register-by-access-token/social/google-oauth2/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            access_token: access_token
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Response from backend:', data);
+          // Handle success response from backend
+        } else {
+          console.error('Failed to register with backend:', response.statusText);
+          // Handle backend failure
+        }
+      } catch (error) {
+        console.error('Error sending token to backend:', error);
+        // Handle fetch error
+      }
+    }
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style>
+/* Add styling for your button or use default styling from Google */
 </style>

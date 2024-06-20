@@ -1,139 +1,88 @@
 <template>
-    <div class="page-sign-up">
-        <div class="columns">
-            <div class="column is-4 is-offset-4">
-                <h1 class="title">Log in</h1>
-
-                <form @submit.prevent="submitForm">
-                    <div class="field">
-                        <label>Username</label>
-                        <div class="control">
-                            <input type="text" class="input" v-model="username">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label>Password</label>
-                        <div class="control">
-                            <input type="password" class="input" v-model="password">
-                        </div>
-                    </div>
-
-                    <div class="notification is-danger" v-if="errors.length">
-                        <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-                    </div>
-
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-link" @click="submitForm">Log in</button>
-                        </div>
-                    </div>
-
-                    
-                    <GoogleLogin :callback="callback" @googleLoginSuccess="handleGoogleLoginSuccess"/>
-
-
-                    <hr>
-                    <p>Or</p>
-                    <router-link to="/sign-up">Click Here</router-link> To Sign up !
-                    
-                </form>
-            </div>
-        </div>
+  <div>
+    <h1>Google One Tap Example</h1>
+    <div id="g_id_onload"
+         data-client_id="146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com"
+         data-login_uri="http://localhost:8080"
+         data-callback="handleCredentialResponse"
+         data-cancel_on_tap_outside="false">
     </div>
+    <div v-if="token">
+      <p>Signed in with token: {{ token }}</p>
+    </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
-export default{
-    name: 'Login',
-    data(){
-        return{
-            username: '',
-            password: '',
-            errors: []
-        }
+export default {
+  data() {
+    return {
+      token: null
+    };
+  },
+  mounted() {
+    // Load Google One Tap client
+    this.loadGoogleOneTapClient();
+  },
+  methods: {
+    loadGoogleOneTapClient() {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.onload = () => {
+        window.google.accounts.id.initialize({
+          client_id: '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com', // Replace with your actual client ID
+          callback: this.handleCredentialResponse,
+          login_uri: 'http://localhost:8080', // Replace with your app's URI
+          cancel_on_tap_outside: false
+        });
+        this.renderGoogleOneTapButton();
+      };
+      document.head.appendChild(script);
     },
-mounted(){
-    document.title = 'log In | Kalima'
-},
-methods: {
-    async submitForm(){
-        axios.defaults.headers.common["Authorization"] = ""
-
-        localStorage.removeItem("token")
-
-        const formData = {
-            username: this.username,
-            password: this.password
-        }
-
-        await axios
-            .post("/api/v1/token/login/", formData)
-            .then(response => {
-                const token = response.data.auth_token
-
-                this.$store.commit('setToken', token)
-
-                axios.defaults.headers.common["Authorization"] = "Token " + token
-
-                localStorage.setItem("token", token)
-
-                // const toPath = this.$route.query.to || '/Api'
-
-                this.$router.push('/Api')
-                
-
-            })
-            .catch(error => {
-                if (error.response){
-                    for (const property in error.response.data){
-                        this.errors.push(`${property}: ${error.response.data[property]}`)
-                    }
-                } else {
-                    this.errors.push("Something went wrong. Please try again")
-                    
-                    console.log(JSON.stringify(error))
-                }
-            })
-        
+    renderGoogleOneTapButton() {
+      window.google.accounts.id.renderButton(
+        document.getElementById('g_id_onload'),
+        { theme: 'filled_blue', size: 'large', text: 'continue_with' }
+      );
     },
-    handleLoginSuccess(token) {
-    localStorage.setItem("token", token);
-    axios.defaults.headers.common["Authorization"] = "Token " + token;
-    this.$router.push('/api');
-    this.$emit('closeModal'); // Emitting the event here
-}
-,
-        handleLoginError(error) {
-            if (error.response) {
-                for (const property in error.response.data) {
-                    this.errors.push(`${property}: ${error.response.data[property]}`);
-                }
-            } else {
-                this.errors.push("Something went wrong. Please try again");
-                console.error(JSON.stringify(error));
-            }
-        },
-        callback(response) {
-    console.log('Google authentication response:', response);
-
-    if (response.clientId && response.client_id && response.credential && response.select_by) {
-        const token = response.credential;
-        const expirationTime = new Date().getTime() + 30 * 60 * 1000;
-        localStorage.setItem('token', JSON.stringify({ token, expirationTime }));
-
-        this.handleLoginSuccess(token);
-    } else {
+    handleCredentialResponse(response) {
+      if (response.clientId && response.credential && response.select_by) {
+        const access_token = response.credential;
+        this.sendTokenToBackend(access_token);
+        this.token = access_token; // Optionally store or display the token
+      } else {
         console.error('Invalid response from Google authentication');
-    }
-},
+      }
+    },
+    async sendTokenToBackend(access_token) {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/register-by-access-token/social/google-oauth2/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            access_token: access_token
+          })
+        });
 
-        handleGoogleLoginSuccess() {
-            this.$router.push('/api');
-            this.$emit('closeModal');
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Response from backend:', data);
+          // Handle success response from backend
+        } else {
+          console.error('Failed to register with backend:', response.statusText);
+          // Handle backend failure
         }
-}
-}
-
+      } catch (error) {
+        console.error('Error sending token to backend:', error);
+        // Handle fetch error
+      }
+    }
+  }
+};
 </script>
+
+<style>
+/* Add styling for your button or use default styling from Google */
+</style>

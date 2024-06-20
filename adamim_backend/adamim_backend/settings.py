@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,24 +28,43 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'api',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
     'djoser',
+    'social_django',
+    
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+
+
+
+
+
+CORS_ORIGIN_ALLOW_ALL = True # Set this to True if you want to allow all origins
+CORS_ALLOW_CREDENTIALS = True  # Set this to True to allow cookies to be included in cross-site HTTP requests
+
+# Add your frontend URL to CORS_ORIGIN_WHITELIST if CORS_ORIGIN_ALLOW_ALL is False
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',  # Replace with your frontend URL
+    'http://192.168.43.2:8080',
+]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',  # Add your frontend URL here
+    # Add other allowed origins as needed
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +75,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 ROOT_URLCONF = 'adamim_backend.urls'
 
@@ -70,13 +94,30 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+              
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'adamim_backend.wsgi.application'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
 
+
+# Authentication backends
+# https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#authentication-backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',  ]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -112,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
+ 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
