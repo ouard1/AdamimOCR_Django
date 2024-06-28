@@ -100,7 +100,7 @@ export default {
 
 <style lang="scss">
 
-/* Add this to your existing style block */
+
 #app {
   display: flex;
   flex-direction: column;
@@ -124,7 +124,7 @@ section, footer {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 999; /* Ensure the modal is on top of other elements */
+  z-index: 999; 
 }
 
 .modal-background {
@@ -133,7 +133,7 @@ section, footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background to create the overlay effect */
+  background-color: rgba(0, 0, 0, 0.5); 
 }
 
 .modal-content {
@@ -141,7 +141,7 @@ section, footer {
   background-color: white;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure the modal content is on top of the background */
+  z-index: 1000; 
   border-radius: 10px;
 }
 
@@ -151,7 +151,7 @@ section, footer {
   right: 10px;
   font-size: 24px;
   cursor: pointer;
-  z-index: 1001; /* Ensure the close button is on top of the modal content */
+  z-index: 1001; 
 }
 
 .navbar {

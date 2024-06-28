@@ -79,7 +79,7 @@
       script.src = 'https://accounts.google.com/gsi/client';
       script.onload = () => {
         window.google.accounts.id.initialize({
-          client_id: '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com', 
+          client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID, 
           callback: this.handleCredentialResponse,
           login_uri: 'http://localhost:8080', 
           cancel_on_tap_outside: false

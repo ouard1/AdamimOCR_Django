@@ -134,7 +134,7 @@ div{
 border-radius: 16px;
 }
 .left-content {
-  margin-right: 150px; /* Adjust as needed */
+  margin-right: 150px; 
 }
 
 .right-content {
