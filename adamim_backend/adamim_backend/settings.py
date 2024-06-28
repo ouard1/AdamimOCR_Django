@@ -76,7 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+   
     
 ]
 
@@ -125,7 +125,7 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.google.GoogleOAuth2',  ]
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
