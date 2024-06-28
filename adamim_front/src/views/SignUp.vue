@@ -1,163 +1,204 @@
 <template>
     <div class="page-sign-up">
-        <div class="columns">
-            <div class="column is-4 is-offset-4">
-                <h1 class="title" style="color: aliceblue;">Sign up</h1>
-
-                <form @submit.prevent="submitForm">
-                    <div class="field">
-                        <label class="label">Username</label>
-                        <div class="control">
-                            <input type="text" class="input" v-model="username">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Password</label>
-                        <div class="control">
-                            <input type="password" class="input" v-model="password">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Repeat Password</label>
-                        <div class="control">
-                            <input type="password" class="input" v-model="password2">
-                        </div>
-                    </div>
-
-                    <div class="notification is-danger" v-if="errors.length">
-                        <p v-for="error in errors" v-bind::key="error">{{ error }}</p>
-                    </div>
-
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-link">Sign up</button>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div style="font-family: 'poppins', sans-serif; color: white; text-align: center;">
-                        or sign up with Google 
-                        <img src="@/assets/google.png" alt="Google Sign Up" style="width: 1.5em; height: 1.5em; margin-left: 5px; background: transparent;"/>
-                    </div>
-                    <br>
-                    <div style="display: flex; justify-content: center;">
-                    <GoogleLogin :callback="callback" @googleLoginSuccess="handleGoogleLoginSuccess"/>
-                    </div>
-                </form>
+      <div class="columns">
+        <div class="column is-4 is-offset-4">
+          <h1 class="title" style="color: aliceblue;">Sign up</h1>
+  
+          <form @submit.prevent="submitForm">
+            <div class="field">
+              <label class="label">Username</label>
+              <div class="control">
+                <input type="text" class="input" v-model="username">
+              </div>
             </div>
+  
+
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input type="password" class="input" v-model="password">
+              </div>
+            </div>
+  
+            <div class="field">
+              <label class="label">Repeat Password</label>
+              <div class="control">
+                <input type="password" class="input" v-model="password2">
+              </div>
+            </div>
+  
+            <div class="notification is-danger" v-if="errors.length">
+              <p v-for="error in errors" :key="error">{{ error }}</p>
+            </div>
+  
+            <div class="field">
+              <div class="control">
+                <button class="button is-link">Sign up</button>
+              </div>
+            </div>
+  
+            <hr>
+            
+              <p style="font-family: 'poppins', sans-serif; color: white; text-align: center;">Or continue with google </p>
+              
+      <div style="display: flex; justify-content: center;" id="g_id_onload"
+           data-client_id="146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com"
+           data-login_uri="http://localhost:8080"
+           data-callback="handleCredentialResponse"
+           data-cancel_on_tap_outside="false">
+      </div>
+          </form>
         </div>
+      </div>
     </div>
-</template>
-
-<script>
-import axios from 'axios'
-import { toast } from 'bulma-toast'
-
-export default {
-    mounted(){
-    document.title = 'Sign Up | Kalima'
-},
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  import { toast } from 'bulma-toast';
+  
+  export default {
     name: 'SignUp',
     data() {
-        return {
-            username: '',
-            password:'',
-            password2: '',
-            errors: []
-        }
-        
+      return {
+        username: '',
+        password: '',
+        password2: '',
+        errors: [],
+        accessToken: null,
+        refreshToken: null
+      };
+    },
+    mounted() {
+      document.title = 'Sign Up | Kalima';
+      this.loadGoogleOneTapClient();
     },
     methods: {
-        submitForm() {
-            this.errors = []
+      loadGoogleOneTapClient() {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.onload = () => {
+        window.google.accounts.id.initialize({
+          client_id: '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com', 
+          callback: this.handleCredentialResponse,
+          login_uri: 'http://localhost:8080', 
+          cancel_on_tap_outside: false
+        });
+        this.renderGoogleOneTapButton();
+      };
+      document.head.appendChild(script);
+    },
+    renderGoogleOneTapButton() {
+      window.google.accounts.id.renderButton(
+        document.getElementById('g_id_onload'),
+        { theme: 'filled_white', size: 'large', text: 'continue_with' }
+      );
+    },
+    async handleCredentialResponse(response) {
+      if (response.clientId && response.credential && response.select_by) {
+        const token_id = response.credential;
+        this.sendTokenToBackend(token_id);
+        
+      } else {
+        console.error('Invalid response from Google authentication');
+      }
+    },
+    async sendTokenToBackend(token_id) {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/auth/google/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token_id: token_id
+          })
+        });
 
-            if (this.username === ''){
-                this.errors.push('the username is missing')
-            }
-
-            if (this.password === ''){
-                this.errors.push('the password is too short')
-            }
-
-            if (this.password !== this.password2){
-                this.errors.push('the passwords do not match')
-            }
-
-            if (!this.errors.length){
-                const formData = {
-                    username: this.username,
-                    password: this.password
-                }
-
-                axios
-                    .post("/api/v1/users/", formData)
-                    .then(response => {
-                        toast({
-                            message: 'Account created, please log in',
-                            type: 'is-success',
-                            dismissible: true,
-                            pauseOnHover: true,
-                            duration: 2000,
-                            position: 'bottom-right',
-                        })
-
-                        this.$router.push('/log-in')
-                    })
-                    .catch(error => {
-                        if (error.response){
-                            for (const property in error.response.data){
-                                this.errors.push(`${property}: ${error.response.data[property]}`)
-                            }
-                            console.log(JSON.stringify(error.response.data))
-                        } else if (error.message){
-                            this.errors.push('Something went wrong. Please try again')
-
-                            console.log(JSON.stringify(error))
-                        }
-                    })
-            }
-        },
-        async handleLoginSuccess(token) {
-            localStorage.setItem("token", token);
-            axios.defaults.headers.common["Authorization"] = "Token " + token;
-            window.location.href = '/Api';
-            this.$emit('closeModal');
-        },
-        handleLoginError(error) {
-            if (error.response) {
-                for (const property in error.response.data) {
-                    this.errors.push(`${property}: ${error.response.data[property]}`);
-                }
-            } else {
-                this.errors.push("Something went wrong. Please try again");
-                console.error(JSON.stringify(error));
-            }
-        },
-        callback(response) {
-            if (response.clientId && response.client_id && response.credential && response.select_by) {
-                const token = response.credential;
-                const expirationTime = new Date().getTime() + 30 * 60 * 1000;
-                localStorage.setItem('token', JSON.stringify({ token, expirationTime }));
-
-                this.handleLoginSuccess(token);
-            } else {
-                console.error('Invalid response from Google authentication');
-            }
-        },
-        handleGoogleLoginSuccess() {
-            this.$router.push('/api');
+        if (response.ok) {
+          const data = await response.json();
+          const { access, refresh } = data;
+          this.setAuthTokens(access, refresh);
+        } else {
+          console.error('Failed to register with backend:', response.statusText);
+          
         }
-        }}
-</script>
-
-<style>
-.label{
+      } catch (error) {
+        console.error('Error sending token to backend:', error);
+      
+      }
+    },
+      async submitForm() {
+        this.errors = [];
+  
+        if (!this.username.trim()) {
+          this.errors.push('Username is required.');
+        }
+  
+        
+  
+        if (!this.password.trim()) {
+          this.errors.push('Password is required.');
+        }
+  
+        if (this.password !== this.password2) {
+          this.errors.push('Passwords do not match.');
+        }
+  
+        if (this.errors.length === 0) {
+          try {
+            const formData = {
+              username: this.username,
+              password: this.password,
+              password2: this.password2
+            };
+  
+            const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', formData);
+  
+            if (response.status === 201) {
+              toast({
+                message: 'Account created, please log in',
+                type: 'is-success',
+                dismissible: true,
+                pauseOnHover: true,
+                duration: 2000,
+                position: 'bottom-right',
+              });
+  
+              this.$router.push('/log-in');
+            } else {
+              this.errors.push(response.data.detail || 'Sign up failed. Please check your inputs.');
+            }
+          } catch (error) {
+            console.error('Error during sign up:', error);
+            this.errors.push('Something went wrong. Please try again.');
+          }
+        }
+      },
+      handleGoogleLoginSuccess() {
+        this.$router.push('/api');
+      },
+      setAuthTokens(access, refresh) {
+      
+      this.$store.commit('setAuthentication', { isAuthenticated: true, accessToken: access, refreshToken: refresh });
+      
+      localStorage.setItem('accessToken', access);
+      localStorage.setItem('refreshToken', refresh);
+      
+      this.$router.push('/Api');
+    }
+      
+    }
+  };
+  </script>
+  
+  <style>
+  .label {
     color: white;
-}
-
-img{
+  }
+  
+  img {
     background: transparent;
-}
-</style>
+  }
+  </style>
+  

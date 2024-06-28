@@ -11,28 +11,29 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# settings.py
 
-GOOGLE_OAUTH2_CLIENT_ID = '146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com'
+
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4wh0o*lb)#1#kkyfcfm#86_94ae*sxb=3n7*y!k9w2)fb3tab0'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=False) == 'True'
 
-ALLOWED_HOSTS = []
 
 SITE_ID = 1 
 
-# Application definition
+
 
 INSTALLED_APPS = [
     'corsheaders',
@@ -44,9 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
-    'rest_framework.authtoken',
-    'djoser',
-    'social_django',
+    'rest_framework_simplejwt',
+   
     
 ]
 
@@ -55,18 +55,17 @@ INSTALLED_APPS = [
 
 
 
-CORS_ORIGIN_ALLOW_ALL = True # Set this to True if you want to allow all origins
-CORS_ALLOW_CREDENTIALS = True  # Set this to True to allow cookies to be included in cross-site HTTP requests
+# CORS settings
+CORS_ALLOW_CREDENTIALS = True
 
-# Add your frontend URL to CORS_ORIGIN_WHITELIST if CORS_ORIGIN_ALLOW_ALL is False
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8080',  # Replace with your frontend URL
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',  
     'http://192.168.43.2:8080',
 ]
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',  # Add your frontend URL here
-    # Add other allowed origins as needed
-]
+
+# Security headers
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,8 +79,7 @@ MIDDLEWARE = [
     
 ]
 
-SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+
 
 ROOT_URLCONF = 'adamim_backend.urls'
 
@@ -106,15 +104,22 @@ WSGI_APPLICATION = 'adamim_backend.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
+from datetime import timedelta
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 # Authentication backends
 # https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#authentication-backends
 AUTHENTICATION_BACKENDS = [
@@ -126,12 +131,17 @@ AUTHENTICATION_BACKENDS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER':  'postgres',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -172,3 +182,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'api.User'
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+GOOGLE_OAUTH2_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_CLIENT_ID')

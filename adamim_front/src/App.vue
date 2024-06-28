@@ -67,51 +67,32 @@
 <script>
 import Login from '@/components/Login'
 import axios from 'axios'
+
 export default {
   data() {
-    return{
+    return {
       showMobileMenu: false,
       modalOpen: false
     }
   },
-beforeCreate() {
-  // this.$store.commit('initializeStore')
-  const token = this.$store.state.token
-
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = "Token " + token
-  } else {
-    axios.defaults.headers.common['Authorization'] = ""
-  }
-},
-components: {
-  Login
-},
-methods: {
-  openModal() {
-    this.modalOpen = true;
+  components: {
+    Login
   },
-  closeModal() {
-    this.modalOpen = false;
-  },
-  logout(){
-            axios.defaults.headers.common["Authorization"] = ""
-
-            localStorage.removeItem("token")
-            localStorage.removeItem("username")
-            localStorage.removeItem("userid")
-
-            this.$store.commit('removeToken')
-
-            this.$router.push('/')
-        },
-    handleLoginSuccess(token) {
-      localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = "Token " + token;
-      this.$router.push('/api');
-      this.$emit('closeModal');
+  methods: {
+    openModal() {
+      this.modalOpen = true;
+    },
+    closeModal() {
+      this.modalOpen = false;
+    },
+    logout() {
+      this.$store.dispatch('logout');
+      this.$router.push('/');
+    },
+    handleLoginSuccess() {
+      this.closeModal();
     }
-}
+  }
 }
 </script>
 

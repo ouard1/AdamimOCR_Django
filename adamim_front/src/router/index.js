@@ -26,7 +26,7 @@ const routes = [
     name: 'Api',
     component: Api,
     meta: {
-      requireLogin: true
+      requiresAuth: true
     }
   },
 ];
@@ -37,8 +37,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requireLogin) && !store.state.isAuthenticated) {
-    next({ name: 'Login', query: { to: to.path } });
+  if (to.matched.some(record => record.meta.requiresAuth) && !store.getters.isAuthenticated) {
+    next({ name: 'Login', query: { redirect: to.fullPath } });
   } else {
     next();
   }

@@ -22,7 +22,7 @@
     <div class="tile is-ancestor mb-3" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #3d5a80;">
   <div class="tile is-4 is-vertical is-parent">
     <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-        <!-- <p class="title" style="color: aliceblue;">One</p> -->
+      
         <h3 class="title is-size-3">What is Kalima ?</h3>
         <p class="main_content is-size-5" style="letter-spacing: 1px;">
             Kalima is a powerful tool designed to extract text from Arabic manuscripts using Optical Character Recognition (OCR) technology.
@@ -33,7 +33,7 @@
         </p>
     </div>
     <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-      <!-- <p class="title" style="color: aliceblue;">Two</p> -->
+    
       <h3 class="title is-size-3">Key Features</h3>
           <ul class="main_content">
             <li><i class="fa-regular fa-square-check" style="color: #006106;"></i> Accurate OCR for Arabic manuscripts</li>
@@ -55,7 +55,7 @@
   </div>
   <div class="tile is-parent">
     <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-      <!-- <p class="title" style="color: aliceblue;">Three</p> -->
+    
       <figure class="image">
       <img src="@/assets/Innovation-amico.png">
     </figure>
@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add any custom styles for the Home page here */
+
 
 .home {
   position: relative;
