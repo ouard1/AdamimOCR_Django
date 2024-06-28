@@ -105,7 +105,7 @@
     },
     async sendTokenToBackend(token_id) {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/auth/google/', {
+        const response = await fetch('https://adamimocr.onrender.com/api/auth/google/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -153,7 +153,7 @@
               password2: this.password2
             };
   
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/register/', formData);
+            const response = await axios.post('https://adamimocr.onrender.com/api/auth/register/', formData);
   
             if (response.status === 201) {
               toast({
