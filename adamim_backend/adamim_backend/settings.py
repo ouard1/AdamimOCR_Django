@@ -61,7 +61,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',  
     'http://192.168.43.2:8080',
-    'https://adamim-ocr-django.vercel.app/'
+    'https://adamim-ocr-django.vercel.app/',
+    'https://adamim-ocr.vercel.app/'
 ]
 
 # Security headers
