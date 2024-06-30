@@ -69,7 +69,7 @@ export default {
         window.google.accounts.id.initialize({
           client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID, 
           callback: this.handleCredentialResponse,
-          login_uri: 'http://localhost:8080', 
+          login_uri: 'https://adamim-ocr-django.vercel.app', 
           cancel_on_tap_outside: false
         });
         this.renderGoogleOneTapButton();
