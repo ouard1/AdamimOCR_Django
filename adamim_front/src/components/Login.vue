@@ -35,7 +35,7 @@
     <h2>Or continue with Google:</h2>
     <div id="g_id_onload"
          data-client_id="146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com"
-         data-login_uri="http://localhost:8080"
+         data-login_uri="https://adamim-ocr-django.vercel.app"
          data-callback="handleCredentialResponse"
          data-cancel_on_tap_outside="false">
     </div>
