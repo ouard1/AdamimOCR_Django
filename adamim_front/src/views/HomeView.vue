@@ -1,40 +1,37 @@
 <template>
   <div class="home">
 
-<div class="hero has-background-primary-light mb-6 pl-3">
-  <div class="hero-content">
-    <div class="left-content">
-      <router-link to="/">
-        <a>
-          <img src="@/assets/logo.png" alt="Logo kalima">
-        </a>
-      </router-link>
+    <div class="hero has-background-primary-light mb-6 pl-3">
+      <div class="hero-content">
+        <div class="left-content">
+          <router-link to="/">
+            <a class="logo-link">
+              <img src="@/assets/logo.png" alt="Logo kalima">
+            </a>
+          </router-link>
+        </div>
+        <div class="right-content">
+          <h2>Welcome to</h2>
+          <h1 class="main_title">Kalima</h1>
+          <h2>Your destination for Arabic manuscript OCR</h2>
+        </div>
+      </div>
     </div>
-    <div class="right-content" style="text-align: center;">
-      <h2>Welcome to</h2>
-      <h1 class="main_title" style="letter-spacing: -5px;">Kalima</h1>
-      <h2>Your destination for Arabic manuscript OCR</h2>
-    </div>
-  </div>
-</div>
-    
 
     <div class="tile is-ancestor mb-3" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #3d5a80;">
-  <div class="tile is-4 is-vertical is-parent">
-    <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-      
-        <h3 class="title is-size-3">What is Kalima ?</h3>
-        <p class="main_content is-size-5" style="letter-spacing: 1px;">
+      <div class="tile is-4 is-vertical is-parent">
+        <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
+          <h3 class="title is-size-3">What is Kalima ?</h3>
+          <p class="main_content is-size-5" style="letter-spacing: 1px;">
             Kalima is a powerful tool designed to extract text from Arabic manuscripts using Optical Character Recognition (OCR) technology.
-        </p>
-        <br>
-        <p class="main_content is-size-5" style="letter-spacing: 1px;">
+          </p>
+          <br>
+          <p class="main_content is-size-5" style="letter-spacing: 1px;">
             With Kalima, you can easily digitize and analyze ancient Arabic texts, making them accessible for research, education, and preservation purposes.
-        </p>
-    </div>
-    <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-    
-      <h3 class="title is-size-3">Key Features</h3>
+          </p>
+        </div>
+        <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
+          <h3 class="title is-size-3">Key Features</h3>
           <ul class="main_content">
             <li><i class="fa-regular fa-square-check" style="color: #006106;"></i> Accurate OCR for Arabic manuscripts</li>
             <br>
@@ -51,34 +48,32 @@
             <li><i class="fa-regular fa-square-check" style="color: #006106;"></i> Scalable solution for processing large volumes of manuscripts</li>
             <br>
           </ul>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
+          <figure class="image">
+            <img src="@/assets/Innovation-amico.png">
+          </figure>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="tile is-parent">
-    <div class="tile is-child has-background-primary-light box" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); background-color: #8ecae6;">
-    
-      <figure class="image">
-      <img src="@/assets/Innovation-amico.png">
-    </figure>
-    </div>
-  </div>
-</div>
-<br> <br>
+    <br> <br>
 
-<section class="hero has-background-info-dark" style="text-align: center; border-radius: 15px; font-family: 'inter', sans-serif; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
-  <div class="hero-body" style="color: white;">
-    <p class="her_title" style="font-size: 250%;">
-      Get Started
-    </p>
-    <br>
-    <p class="hero_subtitle" style="font-size: 150%;">
-      Ready to explore the world of Arabic manuscript OCR? Sign up now to get started!
-    </p>
-    <br>
-    <router-link to="/Api" class="button is-primary is-size-5">Access Kalima</router-link>
+    <section class="hero has-background-info-dark" style="text-align: center; border-radius: 15px; font-family: 'inter', sans-serif; box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
+      <div class="hero-body" style="color: white;">
+        <p class="her_title" style="font-size: 250%;">
+          Get Started
+        </p>
+        <br>
+        <p class="hero_subtitle" style="font-size: 150%;">
+          Ready to explore the world of Arabic manuscript OCR? Sign up now to get started!
+        </p>
+        <br>
+        <router-link to="/Api" class="button is-primary is-size-5">Access Kalima</router-link>
+      </div>
+    </section>
   </div>
-</section>
-</div>
-
 </template>
 
 <script>
@@ -90,8 +85,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .home {
   position: relative;
 }
@@ -128,17 +121,19 @@ export default {
 .hero-content {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Ensure space between the left and right content */
 }
 
-div{
-border-radius: 16px;
+div {
+  border-radius: 16px;
 }
+
 .left-content {
-  margin-right: 150px; 
+  margin-right: 150px;
 }
 
 .right-content {
-  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Add shadow to the text */
+  text-align: center;
   font-size: 2em;
   font-weight: bold;
   color: #00008B;
@@ -151,17 +146,30 @@ border-radius: 16px;
   font-family: 'inter', sans-serif;
 }
 
-.title{
+.title {
   color: #00008B;
   font-family: 'inter', sans-serif;
   font-weight: 800;
 }
 
-.main_content{
+.main_content {
   font-family: 'inter', sans-serif;
   color: #00008B;
 }
 
-
-
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .left-content {
+    display: none; /* Hide the logo on smaller screens */
+  }
+  .right-content {
+    font-size: 1.5em;
+  }
+  .main_title {
+    font-size: 2em;
+  }
+}
 </style>

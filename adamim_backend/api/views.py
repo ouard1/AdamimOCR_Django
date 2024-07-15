@@ -34,7 +34,7 @@ def google_one_tap_auth(request):
 
     try:
       
-        CLIENT_ID = ' 146908205548-qsu2ppsmnju9cjsk1qgrngm3n09bhrd2.apps.googleusercontent.com'
+        
         url = f"https://oauth2.googleapis.com/tokeninfo?id_token={token_id}"
         response = requests.get(url)
         data = response.json()
